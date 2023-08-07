@@ -29,7 +29,7 @@ const ImageManager = ({ dirs }) => {
     try {
       if (!selectedFile) return;
       const formData = new FormData();
-      formData.append("myImage", selectedFile);
+      formData.append("image", selectedFile);
       const { data } = await axios.post("/api/image-manager", formData);
       console.log(data);
     } catch (error) {
