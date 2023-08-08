@@ -13,7 +13,10 @@ export async function GET(request) {
   const token = url.searchParams.get("token");
   const idDeals = url.searchParams.get("ids[]");
   const userId = url.searchParams.get("user_id");
-  const alone = url.searchParams.get("alone");
+  // const alone = url.searchParams.get("alone");
+  if (!userId) {
+    return NextResponse.json({ data: jsonData }, { status: 200 });
+  }
 
   const images = jsonData.filter(e => e.includes(idDeals));
 
