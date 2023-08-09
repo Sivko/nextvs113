@@ -90,7 +90,7 @@ const ImageManager = ({ dirs }) => {
       <div className="max-w-4xl mt-4 mx-auto flex flex-wrap gap-4">
         {images.map((e, index) => (<div key={index}>
           <Link target="_blank" href={`/image-manager/${e}`}>
-            <Image src={`/image-manager/${e}`} alt="" width={150} className="h-fit" height={100} />
+            <Image src={`/image-manager/11.jpg`} alt="" width={150} className="h-fit" height={100} />
           </Link>
         </div>))}
       </div>
