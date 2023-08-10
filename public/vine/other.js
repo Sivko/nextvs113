@@ -3,13 +3,13 @@ console.log("other")
 var editor,editor2
 
 //Посмотреть название поля API (два раза кликнуть по названию поля)
-$('body').on('dblclick', '.form-group', function(){
-	let hideInput = `<div id="hideInp" style="opacity: 0"><input type="text"></div>`
-	if ($('#hideInp').html()==undefined) $('#wrapper').append(hideInput);
-	$('#hideInp input').val($(this).attr('data-field')).select()
-	document.execCommand("copy");
-	toastr.info('Информация в буфере обмена', 'Скопировал!')
-})
+// $('body').on('dblclick', '.form-group', function(){
+// 	let hideInput = `<div id="hideInp" style="opacity: 0"><input type="text"></div>`
+// 	if ($('#hideInp').html()==undefined) $('#wrapper').append(hideInput);
+// 	$('#hideInp input').val($(this).attr('data-field')).select()
+// 	document.execCommand("copy");
+// 	toastr.info('Информация в буфере обмена', 'Скопировал!')
+// })
 
 
 /*userMenu*/

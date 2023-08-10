@@ -171,7 +171,8 @@ $('body').on('mouseleave','.control-label:contains("Сценарий для за
 })
 
 $('body').on('click','.control-label:contains("Сценарий для запуска") .customlink', function(e){
-    let text = $(this).parent().next().val()
+	debugger
+    let text = $(this).parents('.form-group.inline-group').find('select').first().val()
     $(this).parents('.form-group').find('.dropdown-wrapper').html(`<a target="_blank" href="https://${uriMain}/settings/scenarios/${text}/edit">https://${uriMain}/settings/scenarios/${text}/edit</a>`)
 })
 
