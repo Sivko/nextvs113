@@ -270,7 +270,7 @@ $('body').on('click', '#showActivity', function(){
 	$('.col-xs-8').addClass('col-xs-6').removeClass('col-xs-8')
 	$('#scenario-form').css({"max-width": "inherit"})
 	
-	let activityFrame = `<div class="col-xs-3" id="activityFrame"></div>`
+	let activityFrame = `<div class="col-xs-3" style="height: 100%" id="activityFrame"></div>`
 	$('.settings-main.settings-form__settings-main').append(activityFrame)
 	renderActivityFrame()
 })
@@ -285,7 +285,7 @@ function renderActivityFrame(){
 	})
 	
 	$('#activityFrame').prepend(`
-	<div style="height: 94vh;overflow: auto; display: flex; flex-direction: column;">
+	<div style="height: 100%;overflow: auto; display: flex; flex-direction: column;">
 		<div class="btn btn-primary" onClick="$('.hideF').hide()">Скрыть лишнее</div>
 		<div class="btn btn-primary" onClick="$('.hideF').show()">Вернуть лишнее</div>
 		${_activity.map(e=>`<div class="${fieldsProvider.filter(m=>m.field == e.field)?.length ? 'showF': 'hideF'}">
