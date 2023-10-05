@@ -285,7 +285,7 @@ function renderActivityFrame(){
 	})
 	
 	$('#activityFrame').prepend(`
-	<div style="height: 100vh;overflow: auto; display: flex; flex-direction: column;">
+	<div style="height: 94vh;overflow: auto; display: flex; flex-direction: column;">
 		<div class="btn btn-primary" onClick="$('.hideF').hide()">Скрыть лишнее</div>
 		<div class="btn btn-primary" onClick="$('.hideF').show()">Вернуть лишнее</div>
 		${_activity.map(e=>`<div class="${fieldsProvider.filter(m=>m.field == e.field)?.length ? 'showF': 'hideF'}">
