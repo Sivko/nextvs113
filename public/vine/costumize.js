@@ -227,3 +227,75 @@ $('body').on('mouseenter','.settings-content[data-partial=documents\\:document_t
 	    return category
 	}));
 })
+
+/* Сохранить и вывести активность в сценарии */
+let activity = []
+$('body').on('mouseenter','.ibox-header:contains("Активность"), .ibox-header:contains("Activity")', function(e){
+        $(this).append(`<span id="saveActivity" title="Сохранить активность для вывода в сценариях" class="customlink"><i style="font-size: 17px;vertical-align: middle;" class="s2-icons s2-documents"></i></span>
+        	`)
+})
+
+$('body').on('mouseleave','.ibox-header:contains("Активность"),.ibox-header:contains("Activity")', function(e){
+	$('#saveActivity').remove()
+})
+
+$('body').on('click', '#saveActivity', function(){
+   $('.activity-item[data-key=update],.activity-item[data-key=create]').each(function(){
+   //let date = new Date($(this).find('.first-line.clearfix>span:first').text())
+   let date = $(this).find('.first-line.clearfix>span:first').text();
+   //debugger
+   $(this).find('.change-line').each(function(){
+        let tmp = $(this).text().replaceAll('\n','').split(':')
+        activity.push({field: tmp[0], text:tmp[1], date })
+   })
+   })
+   localStorage.setItem('activity', JSON.stringify(activity))
+	toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
+})
+
+$('#scenario-form').on('mouseenter', function(){
+	let linkToEditUser = `<span title="Предварительно надо ее сохранить (где раскрываетя вся активность в карточке)" id="showActivity" style="background:#FFEB3B; position: absolute; right: 0; top: 0; padding: 5px 10px; font-size: 10px; cursor: pointer"><i class="s2-icons s2-visibility"></i></span>`;
+	$(this).find('.col-xs-8').append(linkToEditUser)
+	$(this).css({position: 'relative'})
+})
+
+$('#scenario-form').on('mouseleave', function(){
+	let linkToEditUser = `<span id="showActivity" style="background:#d3d3d3; position: absolute; right: 0; top: 0">Show</span>`;
+	$("#showActivity").remove()
+})
+
+$('body').on('click', '#showActivity', function(){
+	$('#activityFrame').remove()
+	$('.col-xs-4').addClass('col-xs-3').removeClass('col-xs-4')
+	$('.col-xs-8').addClass('col-xs-6').removeClass('col-xs-8')
+	$('#scenario-form').css({"max-width": "inherit"})
+	
+	let activityFrame = `<div class="col-xs-3" id="activityFrame"></div>`
+	$('.settings-main.settings-form__settings-main').append(activityFrame)
+	renderActivityFrame()
+})
+
+function renderActivityFrame(){
+	let _activity = JSON.parse(localStorage.getItem('activity'))
+	let fieldsProvider = []
+	$('.condition-fieldset .col-xs-6:first-child .selection>.select2-selection>.select2-selection__rendered:first-child').each(function(){
+		let rColor = getRandomColor()
+		fieldsProvider.push({field: $(this).attr('title'), color: rColor})
+		$(this).css({background: rColor})
+	})
+	
+	$('#activityFrame').prepend(`
+	<div style="height: 100vh;overflow: auto; display: flex; flex-direction: column;">
+		<div class="btn btn-primary" onClick="$('.hideF').hide()">Скрыть лишнее</div>
+		<div class="btn btn-primary" onClick="$('.hideF').show()">Вернуть лишнее</div>
+		${_activity.map(e=>`<div class="${fieldsProvider.filter(m=>m.field == e.field)?.length ? 'showF': 'hideF'}">
+		<span style="opacity: 0.7; font-size: 12px; margin-right: 5px;">${e.date}</span><b style="background: ${fieldsProvider.filter(m=>m.field == e.field)[0]?.color}">${e.field}</b><span>${e.text}</span>
+		</div>`).join('')}
+	</div>
+	`)}
+
+
+function getRandomColor() {
+  var o = Math.round, r = Math.random, s = 255;
+    return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ','+'0.5'+')';
+}
