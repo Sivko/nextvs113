@@ -255,7 +255,7 @@ $('body').on('click', '#saveActivity', function(){
    })
    })
    localStorage.setItem('activity', JSON.stringify(activity))
-	//toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
+	toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
 })
 
 $('#scenario-form').on('mouseenter', function(){
