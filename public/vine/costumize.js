@@ -228,6 +228,7 @@ $('body').on('mouseenter','.settings-content[data-partial=documents\\:document_t
 	}));
 })
 
+
 /* Сохранить и вывести активность в сценарии */
 let activity = []
 $('body').on('mouseenter','.ibox-header:contains("Активность"), .ibox-header:contains("Activity")', function(e){
@@ -245,12 +246,16 @@ $('body').on('click', '#saveActivity', function(){
    let date = $(this).find('.first-line.clearfix>span:first').text();
    //debugger
    $(this).find('.change-line').each(function(){
-        let tmp = $(this).text().replaceAll('\n','').split(':')
-        activity.push({field: tmp[0], text:tmp[1], date })
+        let field = $(this).find('strong').first().text().replaceAll('\n','');
+        debugger
+        field = field.slice(0, field.length - 1)
+        $(this).find('strong').first().remove();
+        let text=$(this).text();
+        activity.push({field, text, date })
    })
    })
    localStorage.setItem('activity', JSON.stringify(activity))
-	toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
+	//toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
 })
 
 $('#scenario-form').on('mouseenter', function(){
@@ -289,7 +294,7 @@ function renderActivityFrame(){
 		<div class="btn btn-primary" onClick="$('.hideF').hide()">Скрыть лишнее</div>
 		<div class="btn btn-primary" onClick="$('.hideF').show()">Вернуть лишнее</div>
 		${_activity.map(e=>`<div class="${fieldsProvider.filter(m=>m.field == e.field)?.length ? 'showF': 'hideF'}">
-		<span style="opacity: 0.7; font-size: 12px; margin-right: 5px;">${e.date}</span><b style="background: ${fieldsProvider.filter(m=>m.field == e.field)[0]?.color}">${e.field}</b><span>${e.text}</span>
+		<span style="opacity: 0.7; font-size: 12px; margin-right: 5px;">${e.date}</span><b style="background: ${fieldsProvider.filter(m=>m.field == e.field)[0]?.color}">${e.field}:</b><span>${e.text}</span>
 		</div>`).join('')}
 	</div>
 	`)}
@@ -299,3 +304,4 @@ function getRandomColor() {
   var o = Math.round, r = Math.random, s = 255;
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ','+'0.5'+')';
 }
+
