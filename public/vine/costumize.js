@@ -241,7 +241,7 @@ $('body').on('mouseleave','.ibox-header:contains("Активность"),.ibox-h
 })
 
 $('body').on('click', '#saveActivity', function(){
-   $('.activity-item[data-key=update],.activity-item[data-key=create]').each(function(){
+   $('.activity-item[data-key^=update],.activity-item[data-key^=create]').each(function(){
    //let date = new Date($(this).find('.first-line.clearfix>span:first').text())
    let date = $(this).find('.first-line.clearfix>span:first').text();
    //debugger
