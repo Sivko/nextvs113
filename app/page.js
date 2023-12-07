@@ -18,7 +18,7 @@ export default function Home() {
       </nav>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <section className='w-full flex'>
-          <h1 className='text-2xl'>Cейчас небольшой переезд и апргрейд</h1>
+          <h1 className='text-2xl'>Cейчас небольшой переезд и апргрейд/</h1>
           {/* <Card />
           <Card />
           <Card />
