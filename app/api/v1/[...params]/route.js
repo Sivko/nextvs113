@@ -40,7 +40,7 @@ export async function POST(req) {
     let constant = constants.data.data;
     let webScript = constant.find(obj => obj.id == const_id)?.attributes?.value
     if (!webScript) {
-      throw new Error("Нет доступа к константе");
+      throw new Error(`Нет доступа к константе. status: ${constants.status}, data: ${JSON.stringify(constant)}`);
     }
 
     let compute = new Function('data', 'newData', 'rubles', webScript);
