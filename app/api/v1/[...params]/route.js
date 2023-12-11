@@ -38,12 +38,13 @@ export async function POST(req) {
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };
     let constants = await axios.get('https://app.salesap.ru/api/v1/constants', options)
     let constant = constants.data.data;
-    if (!constants?.data?.data[0]?.id) {
-      throw new Error(`Нет доступа к константе. status: ${constants.status}, data: ${JSON.stringify(constant)}`);
+    if (!constants?.data?.data) {
+      setLog({ url_query: "https://app.salesap.ru/api/v1/constants", res_crm: constants.data, res_code_crm: constants.status, const_id, token, version });
+      return NextResponse.json({ error: "err" })
     }
     let webScript = constant.find(obj => obj.id == const_id)?.attributes?.value
     if (!webScript) {
-      throw new Error(`Нет доступа к константе. status: ${constants.status}, data: ${JSON.stringify(constant)}`);
+      throw new Error(`Нет доступа к константе. status: ${constants.status}, доступные константы: ${constant.map(obj => obj.id).join(", ")}`);
     }
 
     let compute = new Function('data', 'newData', 'rubles', webScript);
