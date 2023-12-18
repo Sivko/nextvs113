@@ -15,7 +15,6 @@ export async function POST(request) {
 
   const pathImage = path.resolve(`./public/image-manager/${file.name}`)
   await writeFile(pathImage, buffer)
-  console.log(`open ${pathImage} to see the uploaded file`)
 
   return NextResponse.json({ success: true })
 }

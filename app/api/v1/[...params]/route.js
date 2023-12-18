@@ -9,9 +9,12 @@ export async function POST(req) {
 
 
   const serilizeUrl = req.url.split('/')
+  const getAddress = serilizeUrl.length > 7;
 
-  const token = serilizeUrl[serilizeUrl.length - 1]
-  const const_id = serilizeUrl[serilizeUrl.length - 2]
+  const token = serilizeUrl[getAddress ? serilizeUrl.length -  2 : serilizeUrl.length - 1]
+  const const_id = serilizeUrl[getAddress ? serilizeUrl.length - 3 : serilizeUrl.length - 2]
+
+  const address = getAddress ? `https://${serilizeUrl[serilizeUrl.length-1]}` : `https://app.salesap.ru`
   const startTime = performance.now()
   const version = "1";
 
@@ -36,10 +39,10 @@ export async function POST(req) {
     const tmp = await req.json()
     const data = tmp.data;
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };
-    let constants = await axios.get('https://app.salesap.ru/api/v1/constants', options)
+    let constants = await axios.get(`${address}/api/v1/constants`, options)
     let constant = constants.data.data;
     if (!constants?.data?.data) {
-      setLog({ url_query: "https://app.salesap.ru/api/v1/constants", res_crm: constants.data, res_code_crm: constants.status, const_id, token, version });
+      setLog({ url_query: `${address}/api/v1/constants`, res_crm: constants.data, res_code_crm: constants.status, const_id, token, version, address });
       return NextResponse.json({ error: "err" })
     }
     let webScript = constant.find(obj => obj.id == const_id)?.attributes?.value
@@ -49,28 +52,26 @@ export async function POST(req) {
 
     let compute = new Function('data', 'newData', 'rubles', webScript);
     const computeResult = compute(data, newData, rubles);
-    const url_query = 'https://app.salesap.ru/api/v1/' + computeResult.type + '/' + data.id;
+    const url_query = `${address}/api/v1/` + computeResult.type + '/' + data.id;
     const resEnd = await axios.patch(url_query, JSON.stringify({ "data": computeResult }), options)
     const time = performance.now() - startTime;
 
     if (resEnd.status == 404 || resEnd.status == 500) {
-      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version });
+      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version, address });
     } else if (resEnd.status !== 200) {
-      setLog({ url_query, res_crm: resEnd.data.data, res_code_crm: resEnd.status, const_id, token, time, version });
+      setLog({ url_query, res_crm: resEnd.data, res_code_crm: resEnd.status, const_id, token, time, version, address });
     } else {
-      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version });
+      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version, address });
     }
     return NextResponse.json({ success: "Ok" })
   } catch (err) {
-    setLog({ const_id, token, error: err, version });
+    setLog({ const_id, token, error: err, version, address });
     return NextResponse.json({ error: err })
   }
 }
 
 export async function GET(req) {
   const serilizeUrl = req.url.split('/')
-  console.log(serilizeUrl[serilizeUrl.length - 1])
-  console.log(serilizeUrl[serilizeUrl.length - 2])
   const axios = require('axios');
   const rubles = require('rubles').rubles;
   return NextResponse.json({ success: "Это Get запрос, а для выполнения скрипта нужен POST :)" })
