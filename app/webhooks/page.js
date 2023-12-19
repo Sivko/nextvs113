@@ -7,6 +7,13 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { IoLogoJavascript } from "react-icons/io";
 import { PiGearSixFill } from "react-icons/pi";
+import { FaCookieBite } from "react-icons/fa";
+import { FaQuestionCircle } from "react-icons/fa";
+import { FaListAlt } from "react-icons/fa";
+import { FaCodepen } from "react-icons/fa";
+import { FaFileCode } from "react-icons/fa6";
+
+import HowItsWork from '@/components/HowItsWork';
 
 
 const options = (token) => ({
@@ -18,13 +25,14 @@ const options = (token) => ({
   validateStatus: () => true
 });
 
-export default function Recipes() {
+export default function Webhooks() {
 
   const [tokenValue, setTokenValue] = useState("");
   const [debouncedTokenValue, setDebounceTokenValue] = useState("");
   const [address, setAddress] = useState("app.salesap.ru")
   const [debouncedAddressValue, setDebounceAddressValue] = useState("");
   const [user, setUser] = useState({});
+  const [activeComponent, setActiveComponent] = useState(0);
 
   const handleInputTokenChange = (event) => {
     setTokenValue(event.target.value);
@@ -89,15 +97,15 @@ export default function Recipes() {
         <div className='p-6 rounded-2xl flex border border-[#00000007] items-center gap-4 bg-black text-white'>
           <IoLogoJavascript color='secondary' size={`4em`} />
           <div className='flex flex-col'>
-            <span>Рецепты вебхуков</span>
+            <span>Вебхуки</span>
             <span></span>
           </div>
         </div>
         <div className='p-6 rounded-2xl border border-[#00000007] bg-white flex gap-4 group overflow-hidden relative'>
           <div className='flex-col flex justify-between z-10'>
-            <div className='text-sm text-secondary'>Укажите адрес СРМ и токен</div>
+            <div className='text-sm text-secondary'>Укажите адрес СРМ (без https) и токен</div>
             <input type="text" placeholder='app.salesap.ru' className='text-sm overflow-hidden text-ellipsis' value={address} onChange={handleInputAddressChange} />
-            <input type="text" className='text-sm overflow-hidden text-ellipsis' value={tokenValue} onChange={handleInputTokenChange} />
+            <input type="text" placeholder='token' className='text-sm overflow-hidden text-ellipsis' value={tokenValue} onChange={handleInputTokenChange} />
             <div className='text-sm'>Нужен для автоматического добавления скрипта в систему</div>
           </div>
           <div className='absolute bottom-0 right-0 translate-x-[7em] translate-y-[7em]'>
@@ -119,45 +127,24 @@ export default function Recipes() {
             <div>1. <a href="https://github.com/meritt/rubles" target='_blank'>Rubles</a></div>
             <div>2. <a href="https://github.com/moment/moment/" target='_blank'>Moment JS</a></div>
           </div>
-          <a className='text-center text-sm underline mt-4' href="#">Напишите что добавить еще </a>
+          <a className='text-center text-sm underline mt-4' href="https://t.me/vineScript113" target='_blank'>Напишите что добавить еще </a>
         </div>
       </div>
     </div >
 
     <div className='container m-auto gap-4 flex mt-4 items-start'>
-
-      <div className='flex-1 flex flex-col gap-4'>
-        <div className='p-6 rounded-2xl border border-[#00000007] bg-white '>
-          <div className='font-bold text-3xl mb-4'>Цифры прописью</div>
-          <p className='text-secondary text-sm'> rubles(12.10) // двенадцать рублей 10 копеек</p>
-          <p>Данный скрипт преобразовывает цифры в прописной варинт</p>
-          <pre className='text-sm mb-4'>{`
-newData.type = "deals";
-let text = rubles(data.amount);
-newData.attributes.description = text;
-return newData
-`}
-          </pre>
-        <p>Здесь мы берем информацию, которую вернул вебхук, в данном случае <span className='underline'>data.amount</span> - сумму из сделки и записываем эту сумму в <span className='underline'>newData.attributes.description</span> - в поле Описание.</p>
-        <p className='mt-4'>Вы можете указать какие поля используете Вы и автоматически вставить скрипт в систему</p>
-        <div>
-          <p>Выберите объект, который Вы используете 
-            <select>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-            </p></div>
-        </div>
+    
+      <div className='p-6 rounded-2xl bg-white sticky top-4'>
+        <ul className='flex flex-col gap-6'>
+          <li onClick={()=>setActiveComponent(0)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 0 ? "text-main" : "text-secondary"}`}><FaQuestionCircle size={`1.5em`} /><span className={`${activeComponent == 0 ? "text-black" : "text-secondary"}`}> Как это работает</span></li>
+          <li onClick={()=>setActiveComponent(1)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 1 ? "text-main" : "text-secondary"}`}><FaCookieBite size={`1.5em`} /><span className={`${activeComponent == 1 ? "text-black" : "text-secondary"}`}> Рецепты Вебхуков</span></li>
+          <li onClick={()=>setActiveComponent(2)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 2 ? "text-main" : "text-secondary"}`}><FaFileCode size={`1.5em`} /><span className={`${activeComponent == 2 ? "text-black" : "text-secondary"}`}> Тестирование </span></li>
+          <li onClick={()=>setActiveComponent(3)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 3 ? "text-main" : "text-secondary"}`}><FaListAlt size={`1.5em`} /><span className={`${activeComponent == 3 ? "text-black" : "text-secondary"}`}> Логи</span></li>
+        </ul>
       </div>
 
-
-      <div className='bg-black w-1/3 p-6 rounded-2xl text-white sticky top-4'>
-        <div className='text-xl mb-4'>Как это работает?</div>
-        <div className='mb-2'>1. Вы описываете скрипт на JS и вставляете его в константу, либо можете взять готовый скрипт из списка</div>
-        <div className='mb-2'>2. Вызываете действие автоматизации <b>отправить вебхук</b> с параметрами POST JSON по адресу  https://vs113.ru/api/v1/idконстанты/токен </div>
-        <div className='mb-2'>Можно посмотреть <a href="#" className='underline'>видосик</a></div>
-      </div>
+      {activeComponent == 0 && <HowItsWork />}
+      
     </div>
   </>);
 

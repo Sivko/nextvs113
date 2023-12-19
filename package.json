@@ -15,6 +15,7 @@
     "eslint-config-next": "13.4.12",
     "formidable": "^3.5.0",
     "fs": "^0.0.1-security",
+    "moment": "^2.29.4",
     "multer": "^1.4.5-lts.1",
     "mv": "^2.1.1",
     "next": "13.4.12",

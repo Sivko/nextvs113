@@ -96,16 +96,16 @@ $('body').on('click','#allVisual', function(e){
 	$('.settings-droppable.ui-droppable a').each(function(){
 		links.push($(this).attr('data-source'))
 	})
-	$('.col-xs-8.settings-main-content.settings-main-remote').html('')
+	$('.settings-main-content.settings-main-remote').html('')
 	for (let i = 0; i<links.length; i++) {
-		$('.col-xs-8.settings-main-content.settings-main-remote').append($('<div>').load(links[i]));
+		$('.settings-main-content.settings-main-remote').append($('<div>').load(links[i]));
 	}
 })
 
-$('body').on('mouseleave','.settings-subhead.col-xs-8 .ss-left', function(e){
+$('body').on('mouseleave','.settings-subhead .ss-left', function(e){
 	$('#allVisual').remove()
 })
-$('body').on('mouseenter','.settings-subhead.col-xs-8 .ss-left', function(e){
+$('body').on('mouseenter','.settings-subhead .ss-left ', function(e){
     $(this).append(`<span title="Вывести записи из всех категорий" id="allVisual" class="customlink"><i style="font-size: 17px;vertical-align: middle;" class="s2-icons s2-download"></i></span>`)
 })
 
@@ -230,7 +230,6 @@ $('body').on('mouseenter','.settings-content[data-partial=documents\\:document_t
 
 
 /* Сохранить и вывести активность в сценарии */
-let activity = []
 $('body').on('mouseenter','.ibox-header:contains("Активность"), .ibox-header:contains("Activity")', function(e){
         $(this).append(`<span id="saveActivity" title="Сохранить активность для вывода в сценариях" class="customlink"><i style="font-size: 17px;vertical-align: middle;" class="s2-icons s2-documents"></i></span>
         	`)
@@ -241,19 +240,23 @@ $('body').on('mouseleave','.ibox-header:contains("Активность"),.ibox-h
 })
 
 $('body').on('click', '#saveActivity', function(){
+	localStorage.setItem('activity', null)
+	let activity = [];
    $('.activity-item[data-key^=update],.activity-item[data-key^=create]').each(function(){
-   //let date = new Date($(this).find('.first-line.clearfix>span:first').text())
-   let date = $(this).find('.first-line.clearfix>span:first').text();
+   	let date
+   if ($(this).attr('data-key') == 'create') date = `* ${$(this).find('.first-line.clearfix>span:first').text().trim()}`
+   else date = $(this).find('.first-line.clearfix>span:first').text().trim();
    //debugger
    $(this).find('.change-line').each(function(){
-        let field = $(this).find('strong').first().text().replaceAll('\n','');
-        debugger
+   		let clone = `<div>${$(this).html()}</div>`;
+        let field = $(clone).find('strong').first().text().trim();
         field = field.slice(0, field.length - 1)
-        $(this).find('strong').first().remove();
-        let text=$(this).text();
+        let text = $(clone).text().replace(field, '').trim();
+        console.log(date);
         activity.push({field, text, date })
    })
    })
+   console.log(activity.length);
    localStorage.setItem('activity', JSON.stringify(activity))
 	toastr.info('Загруженная активность сохранена, теперь можно открыть сценарий для проверки!', 'Информация')
 })
@@ -271,12 +274,14 @@ $('#scenario-form').on('mouseleave', function(){
 
 $('body').on('click', '#showActivity', function(){
 	$('#activityFrame').remove()
-	$('.col-xs-4').addClass('col-xs-3').removeClass('col-xs-4')
-	$('.col-xs-8').addClass('col-xs-6').removeClass('col-xs-8')
-	$('#scenario-form').css({"max-width": "inherit"})
+	$('.settings-content').css({display: 'flex', flexWrap: 'wrap'});
+	$('.settings-header').css({flexBasis: '100%'});
+	//$('.col-xs-4').addClass('col-xs-3').removeClass('col-xs-4')
+	//$('.col-xs-8').addClass('col-xs-6').removeClass('col-xs-8')
+	//$('#scenario-form').css({"max-width": "inherit"})
 	
-	let activityFrame = `<div class="col-xs-3" style="height: 100%" id="activityFrame"></div>`
-	$('.settings-main.settings-form__settings-main').append(activityFrame)
+	let activityFrame = `<div style="flex: 1" id="activityFrame"></div>`
+	$('.settings-content').append(activityFrame)
 	renderActivityFrame()
 })
 
@@ -294,7 +299,7 @@ function renderActivityFrame(){
 		<div class="btn btn-primary" onClick="$('.hideF').hide()">Скрыть лишнее</div>
 		<div class="btn btn-primary" onClick="$('.hideF').show()">Вернуть лишнее</div>
 		${_activity.map(e=>`<div class="${fieldsProvider.filter(m=>m.field == e.field)?.length ? 'showF': 'hideF'}">
-		<span style="opacity: 0.7; font-size: 12px; margin-right: 5px;">${e.date}</span><b style="background: ${fieldsProvider.filter(m=>m.field == e.field)[0]?.color}">${e.field}:</b><span>${e.text}</span>
+		<span style="opacity: 0.7; font-size: 12px; margin-right: 5px;">${e.date}</span><b style="background: ${fieldsProvider.filter(m=>m.field == e.field)[0]?.color}">${e.field}</b><span>${e.text}</span>
 		</div>`).join('')}
 	</div>
 	`)}
@@ -304,4 +309,3 @@ function getRandomColor() {
   var o = Math.round, r = Math.random, s = 255;
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ','+'0.5'+')';
 }
-

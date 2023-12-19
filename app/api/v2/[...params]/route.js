@@ -1,6 +1,5 @@
-import { getLogs, setLog } from '@/modules/LogsModule';
-import { writeFile } from 'fs/promises'
-import { NextRequest, NextResponse } from 'next/server'
+import { setLog } from '@/Modals/LogsModal';
+import { NextResponse } from 'next/server'
 
 const path = require("path");
 

@@ -1,6 +1,9 @@
-import { setLog } from '@/modules/LogsModule';
+import { setLog } from '@/Modals/LogsModal';
 import { writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
+import moment from 'moment';
+import 'moment/locale/ru';
+
 const path = require("path");
 
 export async function POST(req) {
@@ -11,10 +14,10 @@ export async function POST(req) {
   const serilizeUrl = req.url.split('/')
   const getAddress = serilizeUrl.length > 7;
 
-  const token = serilizeUrl[getAddress ? serilizeUrl.length -  2 : serilizeUrl.length - 1]
+  const token = serilizeUrl[getAddress ? serilizeUrl.length - 2 : serilizeUrl.length - 1]
   const const_id = serilizeUrl[getAddress ? serilizeUrl.length - 3 : serilizeUrl.length - 2]
 
-  const address = getAddress ? `https://${serilizeUrl[serilizeUrl.length-1]}` : `https://app.salesap.ru`
+  const address = getAddress ? `https://${serilizeUrl[serilizeUrl.length - 1]}` : `https://app.salesap.ru`
   const startTime = performance.now()
   const version = "1";
 
@@ -71,8 +74,8 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
-  const serilizeUrl = req.url.split('/')
-  const axios = require('axios');
-  const rubles = require('rubles').rubles;
-  return NextResponse.json({ success: "Это Get запрос, а для выполнения скрипта нужен POST :)" })
+  // const serilizeUrl = req.url.split('/')
+  // const axios = require('axios');
+  // const rubles = require('rubles').rubles;
+  return NextResponse.json({ success: `Это Get запрос, а для выполнения скрипта нужен POST :) ${moment().format("MM.dd.YYYY")}` })
 }
