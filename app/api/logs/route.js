@@ -11,6 +11,6 @@ export async function GET(req) {
     // console.log(token, "DATA", data);
     return NextResponse.json(data)
   } catch (err) {
-    NextResponse.json({ err })
+    return NextResponse.json({ err })
   }
 }
