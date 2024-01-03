@@ -38,6 +38,10 @@ export async function POST(req) {
   // if (text) { newData.attributes.description = text.charAt(0).toUpperCase() + text.slice(1) } 
   // else { newData.attributes.description = 0 } return newData
 
+  // let fullName = data.manager_name; let arrName = fullName.split(' '); let result = arrName[0]+' '+arrName[1][0]+'. '+arrName[2][0]+'.'; newData.attributes.customs.custom_103686 = result; return newData
+
+  // newData.type = "deals";   let text = rubles(data.custom_101206);   if (text) { newData.attributes.customs.custom_103046 = text.charAt(0).toUpperCase() + text.slice(1) }    else { newData.attributes.customs.custom_103046 = 0 } return newData
+
   try {
     const tmp = await req.json()
     const data = tmp.data;

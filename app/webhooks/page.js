@@ -14,6 +14,9 @@ import { FaCodepen } from "react-icons/fa";
 import { FaFileCode } from "react-icons/fa6";
 
 import HowItsWork from '@/components/HowItsWork';
+import Recepts from '@/components/Recepts';
+import Testing from '@/components/Testing';
+import Logs from '@/components/Logs';
 
 
 const options = (token) => ({
@@ -57,11 +60,10 @@ export default function Webhooks() {
   }, [address, 500]);
 
   async function getUserInfo() {
-
-    const currentToken = await axios.get(`https://${debouncedAddressValue}/api/v1/current-token`, options(debouncedTokenValue))
     setUser({});
+    const currentToken = await axios.get(`https://${debouncedAddressValue || "app.salesap.ru" }/api/v1/current-token`, options(debouncedTokenValue))
     if (currentToken?.data?.data?.attributes) {
-      const user = await axios.get(`https://${debouncedAddressValue}/api/v1/users/${currentToken?.data?.data?.attributes["user-id"]}`, options(debouncedTokenValue))
+      const user = await axios.get(`https://${debouncedAddressValue || "app.salesap.ru" }/api/v1/users/${currentToken?.data?.data?.attributes["user-id"]}`, options(debouncedTokenValue))
       setUser(user.data.data);
     }
   }
@@ -106,7 +108,6 @@ export default function Webhooks() {
             <div className='text-sm text-secondary'>Укажите адрес СРМ (без https) и токен</div>
             <input type="text" placeholder='app.salesap.ru' className='text-sm overflow-hidden text-ellipsis' value={address} onChange={handleInputAddressChange} />
             <input type="text" placeholder='token' className='text-sm overflow-hidden text-ellipsis' value={tokenValue} onChange={handleInputTokenChange} />
-            <div className='text-sm'>Нужен для автоматического добавления скрипта в систему</div>
           </div>
           <div className='absolute bottom-0 right-0 translate-x-[7em] translate-y-[7em]'>
             <PiGearSixFill className='group-hover:rotate-180 transition-all duration-700 opacity-20' size={`14em`} />
@@ -136,14 +137,18 @@ export default function Webhooks() {
     
       <div className='p-6 rounded-2xl bg-white sticky top-4'>
         <ul className='flex flex-col gap-6'>
-          <li onClick={()=>setActiveComponent(0)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 0 ? "text-main" : "text-secondary"}`}><FaQuestionCircle size={`1.5em`} /><span className={`${activeComponent == 0 ? "text-black" : "text-secondary"}`}> Как это работает</span></li>
-          <li onClick={()=>setActiveComponent(1)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 1 ? "text-main" : "text-secondary"}`}><FaCookieBite size={`1.5em`} /><span className={`${activeComponent == 1 ? "text-black" : "text-secondary"}`}> Рецепты Вебхуков</span></li>
-          <li onClick={()=>setActiveComponent(2)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 2 ? "text-main" : "text-secondary"}`}><FaFileCode size={`1.5em`} /><span className={`${activeComponent == 2 ? "text-black" : "text-secondary"}`}> Тестирование </span></li>
-          <li onClick={()=>setActiveComponent(3)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 3 ? "text-main" : "text-secondary"}`}><FaListAlt size={`1.5em`} /><span className={`${activeComponent == 3 ? "text-black" : "text-secondary"}`}> Логи</span></li>
+          <li onClick={()=>setActiveComponent(0)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 0 ? "text-main" : "text-secondary"}`}><FaQuestionCircle size={`1.5em`} /><span className={`${activeComponent == 0 ? "text-black" : "text-secondary"} whitespace-nowrap`}> Как это работает</span></li>
+          <li onClick={()=>setActiveComponent(1)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 1 ? "text-main" : "text-secondary"}`}><FaCookieBite size={`1.5em`} /><span className={`${activeComponent == 1 ? "text-black" : "text-secondary"} whitespace-nowrap`}> Рецепты Вебхуков</span></li>
+          <li onClick={()=>setActiveComponent(2)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 2 ? "text-main" : "text-secondary"}`}><FaFileCode size={`1.5em`} /><span className={`${activeComponent == 2 ? "text-black" : "text-secondary"} whitespace-nowrap`}> Тестирование </span></li>
+          <li onClick={()=>setActiveComponent(3)} className={`flex gap-4 cursor-pointer items-center ${activeComponent == 3 ? "text-main" : "text-secondary"}`}><FaListAlt size={`1.5em`} /><span className={`${activeComponent == 3 ? "text-black" : "text-secondary"} whitespace-nowrap`}> Логи</span></li>
         </ul>
       </div>
 
       {activeComponent == 0 && <HowItsWork />}
+      {activeComponent == 1 && <Recepts options={options(debouncedTokenValue)} />}
+      {activeComponent == 2 && <Testing options={options(debouncedTokenValue)} />}
+      {activeComponent == 3 && <Logs token={debouncedTokenValue} />}
+
       
     </div>
   </>);

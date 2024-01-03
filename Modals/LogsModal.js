@@ -1,20 +1,23 @@
 
-import serverlessMysql from 'serverless-mysql'
+import serverlessMysql from 'serverless-mysql';
 import dbconfig from '@/dbconfig';
 
-// export async function getLogs() {
-//   try {
-//     const mysql = serverlessMysql();
-//     mysql.config(dbconfig)
-//     await mysql.connect()
-//     let results = await mysql.query('SELECT * FROM logs LIMIT 100')
-//     await mysql.end()
-//     return results;
-//   } catch (err) {
-//     console.error(err)
-//     return err;
-//   }
-// }
+export async function getLogs({token}) {
+
+
+  try {
+    if (!token) return [];
+    const mysql = serverlessMysql();
+    mysql.config(dbconfig)
+    await mysql.connect()
+    let results = await mysql.query(`SELECT * FROM logs WHERE token="${token}" ORDER BY id DESC LIMIT 100`)
+    await mysql.end()
+    return results;
+  } catch (err) {
+    console.error(err)
+    return err;
+  }
+}
 
 export async function setLog({url_query = null, res_crm = null, res_code_crm = null, const_id = null, token = null, error = null, time = null, version, address = 'https://app.salesap.ru' }) {
   try {
