@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server'
 
 const path = require("path");
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req) {
   const axios = require('axios');
   const rubles = require('rubles').rubles;
@@ -28,10 +30,10 @@ export async function POST(req) {
       return true
     }
   }
+  const tmp = await req.json()
+  const data = tmp.data;
 
   try {
-    const tmp = await req.json()
-    const data = tmp.data;
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };
     let constants = await axios.get(`${address}/api/v1/constants`, options);
     let constant = constants.data.data;
@@ -59,7 +61,7 @@ export async function POST(req) {
     // }
     return NextResponse.json({ success: "Ok", time })
   } catch (err) {
-    setLog({ const_id, token, error: err, version, address });
+    setLog({ const_id, token, error: err, version, address, data });
     return NextResponse.json({ error: err })
   }
 }

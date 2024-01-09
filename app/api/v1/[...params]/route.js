@@ -6,6 +6,8 @@ import 'moment/locale/ru';
 
 const path = require("path");
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req) {
   const axios = require('axios');
   const rubles = require('rubles').rubles;
@@ -41,15 +43,15 @@ export async function POST(req) {
   // let fullName = data.manager_name; let arrName = fullName.split(' '); let result = arrName[0]+' '+arrName[1][0]+'. '+arrName[2][0]+'.'; newData.attributes.customs.custom_103686 = result; return newData
 
   // newData.type = "deals";   let text = rubles(data.custom_101206);   if (text) { newData.attributes.customs.custom_103046 = text.charAt(0).toUpperCase() + text.slice(1) }    else { newData.attributes.customs.custom_103046 = 0 } return newData
-
+  const tmp = await req.json()
+  const data = tmp.data;
   try {
-    const tmp = await req.json()
-    const data = tmp.data;
+
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };
     let constants = await axios.get(`${address}/api/v1/constants`, options)
     let constant = constants.data.data;
     if (!constants?.data?.data) {
-      setLog({ url_query: `${address}/api/v1/constants`, res_crm: constants.data, res_code_crm: constants.status, const_id, token, version, address });
+      setLog({ url_query: `${address}/api/v1/constants`, res_crm: constants.data, res_code_crm: constants.status, const_id, token, version, address, data: newData });
       return NextResponse.json({ error: "err" })
     }
     let webScript = constant.find(obj => obj.id == const_id)?.attributes?.value
@@ -64,15 +66,15 @@ export async function POST(req) {
     const time = performance.now() - startTime;
 
     if (resEnd.status == 404 || resEnd.status == 500) {
-      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version, address });
+      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version, address, data });
     } else if (resEnd.status !== 200) {
-      setLog({ url_query, res_crm: resEnd.data, res_code_crm: resEnd.status, const_id, token, time, version, address });
+      setLog({ url_query, res_crm: resEnd.data, res_code_crm: resEnd.status, const_id, token, time, version, address, data });
     } else {
-      setLog({ url_query, res_code_crm: resEnd.status, const_id, token, time, version, address });
+      setLog({ url_query, res_crm: resEnd.data, res_code_crm: resEnd.status, const_id, token, time, version, address, data });
     }
     return NextResponse.json({ success: "Ok" })
   } catch (err) {
-    setLog({ const_id, token, error: err, version, address });
+    setLog({ const_id, token, error: err, version, address, data });
     return NextResponse.json({ error: err })
   }
 }

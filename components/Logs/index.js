@@ -12,7 +12,6 @@ export default function Logs({ token }) {
     setIsLoading(true);
     const _data = await axios.get(`/api/logs?token=${token}`);
     setData(_data.data);
-    console.log(_data.data);
     setIsLoading(false);
   }
 
@@ -37,6 +36,7 @@ export default function Logs({ token }) {
           <th className="border-b font-medium p-4 text-white text-left">created_at</th>
           <th className="border-b font-medium p-4 text-white text-left">time</th>
           <th className="border-b font-medium p-4 text-white text-left">version</th>
+          <th className="border-b font-medium p-4 text-white text-left">data</th>
         </tr>
       </thead>
       {!isLoading && (<tbody className="bg-white dark:bg-slate-800">
@@ -68,6 +68,9 @@ export default function Logs({ token }) {
             </td>
             <td className="border-b max-w-full text-ellipsis overflow-hidden border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
               {e.version}
+            </td>
+            <td className="border-b max-w-full text-ellipsis overflow-hidden border-slate-100 dark:border-slate-700 p-4 text-slate-500 dark:text-slate-400">
+              {e.data}
             </td>
           </tr>
         ))}
