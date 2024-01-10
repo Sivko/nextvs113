@@ -9,8 +9,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={` text-black bg-slate-50`}>
-        {/* <Modals /> */}
+      <body className={`text-black bg-slate-50 scroll`}>
         <PageProvider>
           <Header />
           {children}

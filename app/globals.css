@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-input {
+input { 
   outline: none;
   border-bottom: solid 1px #ddd;
   background-color: none;
@@ -14,4 +14,8 @@ input {
 h1 {
   font-size: 40px;
   /* color: var(--text-color); */
+}
+
+.scroll {
+  @apply [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-track]:rounded   [&::-webkit-scrollbar-track]:bg-gray-50 [&::-webkit-scrollbar-thumb]:rounded  [&::-webkit-scrollbar-thumb]:bg-[#00000029] dark:[&::-webkit-scrollbar-track]:bg-slate-50 dark:[&::-webkit-scrollbar-thumb]:bg-slate-50
 }
