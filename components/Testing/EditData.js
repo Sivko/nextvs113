@@ -9,15 +9,17 @@ import moment from "moment";
 
 export default function EditData({ data, setUserData }) {
 
-  const [tmp, setTmp] = useState(JSON.stringify({data, date: moment().format("DD.MM HH:mm:ss")}, null, "  "));
+  const [tmp, setTmp] = useState(JSON.stringify(data, null, "  "));
 
   function saved(){
     try {
       JSON.parse(tmp)
-      setUserData(prev=>[JSON.parse(tmp),...prev])
+      if (!JSON.parse(tmp).data) throw new Error("Отсутствует data")
+      setUserData(prev=>[{...JSON.parse(tmp), date: moment().format("DD.MM HH:mm:ss")},...prev])
+      console.log("setUserData", {...JSON.parse(tmp), date: moment().format("DD.MM HH:mm:ss")})
       document.getElementById("closeEditor").click();
     } catch (err) {
-      alert("Некорректный JSON")
+      alert(err.message)
       console.log(err);
     }
   }

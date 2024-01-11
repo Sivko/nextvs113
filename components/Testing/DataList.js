@@ -19,7 +19,13 @@ export default function DataList({ setData, setActiveData, activeData, userData,
         <div className="flex gap-2 flex-col ">
           <div className="w-full text-ellipsis overflow-hidden">
           </div>
-          <div className={`bg-slate-50 p-4 text-sm rounded-2xl w-full text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex gap-2 items-center`}><FiPlusCircle /> Свои данные</div>
+          <div
+            className={`bg-slate-50 p-4 text-sm rounded-2xl w-full text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex gap-2 items-center`}
+            onClick={() => setModals([<EditData setUserData={setUserData} key={"editData"} data={{data: {}}} />])}
+          >
+            <FiPlusCircle />
+            Свои данные
+          </div>
 
 
           {!!userData.length && userData.map((e, index) => (
@@ -46,7 +52,7 @@ export default function DataList({ setData, setActiveData, activeData, userData,
                 {e.name}
               </div>
               <div
-                onClick={() => setModals([<EditData setUserData={setUserData} key={"editData"} data={webhooksData[index].data.data} />])}
+                onClick={() => setModals([<EditData setUserData={setUserData} key={"editData"} data={webhooksData[index].data} />])}
                 className="absolute p-2 cursor-pointer right-0 top-0 bottom-0 flex items-center opacity-0 group-hover:opacity-50 text-black">
                 <MdModeEdit />
               </div>

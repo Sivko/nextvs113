@@ -28,7 +28,6 @@ export async function POST(req) {
       'Content-Type': 'application/vnd.api+json',
       'Authorization': 'Bearer ' + token,
       'S2-Allow-Websockets': true
-      // 'Accept': '*'
     },
     validateStatus: function (status) {
       return true
@@ -43,8 +42,8 @@ export async function POST(req) {
   // let fullName = data.manager_name; let arrName = fullName.split(' '); let result = arrName[0]+' '+arrName[1][0]+'. '+arrName[2][0]+'.'; newData.attributes.customs.custom_103686 = result; return newData
 
   // newData.type = "deals";   let text = rubles(data.custom_101206);   if (text) { newData.attributes.customs.custom_103046 = text.charAt(0).toUpperCase() + text.slice(1) }    else { newData.attributes.customs.custom_103046 = 0 } return newData
-  const tmp = await req.json()
-  const data = tmp.data;
+  const request = await req.json()
+  const data = request.data;
   try {
 
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };

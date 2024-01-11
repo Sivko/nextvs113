@@ -1,22 +1,19 @@
 "use client";
 
-import Card from '@/components/CodeElements'
 import axios from 'axios';
-import Image from 'next/image'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { IoLogoJavascript } from "react-icons/io";
 import { PiGearSixFill } from "react-icons/pi";
 import { FaCookieBite } from "react-icons/fa";
 import { FaQuestionCircle } from "react-icons/fa";
 import { FaListAlt } from "react-icons/fa";
-import { FaCodepen } from "react-icons/fa";
 import { FaFileCode } from "react-icons/fa6";
 
 import HowItsWork from '@/components/HowItsWork';
 import Recepts from '@/components/Recepts';
 import Testing from '@/components/Testing';
 import Logs from '@/components/Logs';
+import { Context } from '../page-provider';
 
 
 const options = (token) => ({
@@ -32,22 +29,26 @@ export default function Webhooks() {
 
   const [tokenValue, setTokenValue] = useState("");
   const [debouncedTokenValue, setDebounceTokenValue] = useState("");
-  const [address, setAddress] = useState("app.salesap.ru")
+  const [address, _setAddress] = useState("app.salesap.ru")
   const [debouncedAddressValue, setDebounceAddressValue] = useState("");
   const [user, setUser] = useState({});
   const [activeComponent, setActiveComponent] = useState(0);
+
+  const {setToken, setAddress} = useContext(Context);
 
   const handleInputTokenChange = (event) => {
     setTokenValue(event.target.value);
   };
 
   const handleInputAddressChange = (event) => {
-    setAddress(event.target.value);
+    _setAddress(event.target.value);
+    setAddress(event.target.value)
   };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setDebounceTokenValue(tokenValue);
+      setToken(tokenValue)
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [tokenValue, 500]);
@@ -73,7 +74,7 @@ export default function Webhooks() {
       let token = localStorage.getItem("token");
       if (token) setTokenValue(token)
       let site = localStorage.getItem("address")
-      if (site) setAddress(site)
+      if (site) _setAddress(site)
     }
   }, [])
 
@@ -133,7 +134,7 @@ export default function Webhooks() {
       </div>
     </div >
 
-    <div className='container m-auto gap-4 flex mt-4 items-start'>
+    <div className='container m-auto gap-4 flex my-4 items-start'>
     
       <div className='p-6 rounded-2xl bg-white sticky top-4'>
         <ul className='flex flex-col gap-6'>
