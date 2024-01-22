@@ -4,6 +4,15 @@ $(document).ready(function(){
 	$(document.body).append(style);
 })
 
+/* Отменять автоматическую сортировку для селектов */
+$("select").on("select2:select", function (evt) {
+  var element = evt.params.data.element;
+  var $element = $(element);
+  
+  $element.detach();
+  $(this).append($element);
+  $(this).trigger("change");
+});
 
 /*Открывать настройки полей из карточки объекта*/
 $('body').on('mouseenter','.form-group[data-field]', function(){

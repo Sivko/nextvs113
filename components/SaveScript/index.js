@@ -124,7 +124,7 @@ export default function SaveScript({ webScript }) {
         className="flex justify-between p-4 border-solid border items-center mt-4"
         onSubmit={createConstant}
       >
-        <div>Название: <input required="required" className="" placeholder="Название" onChange={e => setName(e.value)} value={name} /></div>
+        <div>Название: <input required="required" className="" placeholder="Название" onChange={e => {setName(e.target.value)}} value={name} /></div>
         <div>
           <button
             type="submit"
