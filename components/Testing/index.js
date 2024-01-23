@@ -40,8 +40,8 @@ export default function Testing({ options }) {
     localStorage.setItem("webScript", webScript);
     localStorage.setItem("userData", JSON.stringify(userData));
     try {
-      let compute = new Function('data', 'newData', 'rubles', 'axios', 'options', webScript);
-      setComputeResult(compute(data, newData, rubles, axios, options));
+      let compute = new Function('data', 'newData', 'rubles', 'moment', 'axios', 'options', webScript);
+      setComputeResult(compute(data, newData, rubles, moment, axios, options));
     } catch (err) {
       // debugger
       setComputeResult(String(err));
