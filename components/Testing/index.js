@@ -16,7 +16,7 @@ import DownloadScript from "../DownloadScript";
 import { RiFormatClear } from "react-icons/ri";
 import { AiOutlineFormatPainter } from "react-icons/ai";
 import SaveScript from "../SaveScript";
-
+import petrovich from "petrovich";
 
 export default function Testing({ options }) {
 
@@ -40,8 +40,8 @@ export default function Testing({ options }) {
     localStorage.setItem("webScript", webScript);
     localStorage.setItem("userData", JSON.stringify(userData));
     try {
-      let compute = new Function('data', 'newData', 'rubles', 'moment', 'axios', 'options', webScript);
-      setComputeResult(compute(data, newData, rubles, moment, axios, options));
+      let compute = new Function('data', 'newData', 'rubles', 'moment', 'axios', 'options', 'petrovich', webScript);
+      setComputeResult(compute(data, newData, rubles, moment, axios, options, petrovich));
     } catch (err) {
       // debugger
       setComputeResult(String(err));

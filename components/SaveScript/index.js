@@ -31,6 +31,7 @@ export default function SaveScript({ webScript }) {
       .then(e => setModals([(<div key="success" className="w-2/3 p-10 rounded-2xl bg-white relative">
         <h1>Все ок, ID: {e.data.data.id}</h1>
         <p>Теперь надо создать автоматизацию с отправкой веб-хука :)</p>
+        <p>{`https://vs113.ru/api/v1/${e.data.data.id}/${token}/${address}`}</p>
       </div>)]))
       .catch(err => setModals([(<div key="error" className="w-2/3 p-10 rounded-2xl bg-white relative">
         <h1>Что-то пошло не так</h1>
@@ -54,6 +55,7 @@ export default function SaveScript({ webScript }) {
     axios.patch(`https://${address}/api/v1/constants/${id}`, JSON.stringify(data), options)
       .then(e => setModals([(<div key="success" className="w-2/3 p-10 rounded-2xl bg-white relative">
         <h1>Все ок, ID: {e.data.data.id}</h1>
+        <p>{`https://vs113.ru/api/v1/${e.data.data.id}/${token}/${address}`}</p>
         <p>Данные успешно перезаписаны :)</p>
       </div>)]))
       .catch(err => setModals([(<div key="error" className="w-2/3 p-10 rounded-2xl bg-white relative">

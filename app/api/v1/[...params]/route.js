@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises'
 import { NextRequest, NextResponse } from 'next/server'
 import moment from 'moment';
 import 'moment/locale/ru';
+import petrovich from "petrovich";
 
 const path = require("path");
 
@@ -58,8 +59,8 @@ export async function POST(req) {
       throw new Error(`Нет доступа к константе. status: ${constants.status}, доступные константы: ${constant.map(obj => obj.id).join(", ")}`);
     }
 
-    let compute = new Function('data', 'newData', 'rubles', 'axios', 'moment', webScript);
-    const computeResult = compute(data, newData, rubles, axios, moment);
+    let compute = new Function('data', 'newData', 'rubles', 'axios', 'moment', 'petrovich', webScript);
+    const computeResult = compute(data, newData, rubles, axios, moment, petrovich);
     const url_query = `${address}/api/v1/` + computeResult.type + '/' + data.id;
     const resEnd = await axios.patch(url_query, JSON.stringify({ "data": computeResult }), options)
     const time = performance.now() - startTime;
