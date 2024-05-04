@@ -7,7 +7,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { MdModeEdit } from "react-icons/md";
 import EditData from "./EditData";
 
-export default function DataList({ setData, setActiveData, activeData, userData, setUserData }) {
+export default function DataList({ setData, setActiveData, activeData, userData, setUserData, setRequest }) {
 
   const { setModals } = useContext(Context);
 
@@ -21,7 +21,7 @@ export default function DataList({ setData, setActiveData, activeData, userData,
           </div>
           <div
             className={`bg-slate-50 p-4 text-sm rounded-2xl w-full text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer flex gap-2 items-center`}
-            onClick={() => setModals([<EditData setUserData={setUserData} key={"editData"} data={{data: {}}} />])}
+            onClick={() => setModals([<EditData setUserData={setUserData} key={"editData"} data={{ data: {} }} />])}
           >
             <FiPlusCircle />
             Свои данные
@@ -31,7 +31,7 @@ export default function DataList({ setData, setActiveData, activeData, userData,
           {!!userData.length && userData.map((e, index) => (
             <div key={index} className="group relative">
               <div
-                onClick={() => { setData(userData[index].data); setActiveData(`userData_${index}`) }}
+                onClick={() => { setRequest(userData[index]); setData(userData[index].data); setActiveData(`userData_${index}`) }}
                 className={`${activeData == `userData_${index}` ? "bg-main text-white" : "bg-slate-50"} p-4 text-sm rounded-2xl w-full text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer`}>
                 {userData[index].date}
               </div>
@@ -47,7 +47,7 @@ export default function DataList({ setData, setActiveData, activeData, userData,
           {webhooksData.map((e, index) => (
             <div key={index} className="group relative">
               <div
-                onClick={() => { setData(webhooksData[index].data.data); setActiveData(`webhook_${index}`) }}
+                onClick={() => { setRequest(webhooksData[index].data); setData(webhooksData[index].data.data); setActiveData(`webhook_${index}`) }}
                 className={`${activeData == `webhook_${index}` ? "bg-main text-white" : "bg-slate-50"} p-4 text-sm rounded-2xl w-full text-ellipsis overflow-hidden whitespace-nowrap cursor-pointer`}>
                 {e.name}
               </div>

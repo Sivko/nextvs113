@@ -25,6 +25,7 @@ export default function Testing({ options }) {
   const [computeResult, setComputeResult] = useState({});
   const [activeData, setActiveData] = useState('webhook_0');
   const [userData, setUserData] = useState([]);
+  const [request, setRequest] = useState({})
 
   const { setModals } = useContext(Context);
 
@@ -40,8 +41,8 @@ export default function Testing({ options }) {
     localStorage.setItem("webScript", webScript);
     localStorage.setItem("userData", JSON.stringify(userData));
     try {
-      let compute = new Function('data', 'newData', 'rubles', 'moment', 'axios', 'options', 'petrovich', webScript);
-      setComputeResult(compute(data, newData, rubles, moment, axios, options, petrovich));
+      let compute = new Function('data', 'newData', 'rubles', 'moment', 'axios', 'options', 'petrovich', 'request', webScript);
+      setComputeResult(compute(data, newData, rubles, moment, axios, options, petrovich, request));
     } catch (err) {
       // debugger
       setComputeResult(String(err));
@@ -50,7 +51,7 @@ export default function Testing({ options }) {
 
   return (
     <div className="p-6 bg-white rounded-2xl w-full flex gap-4 h-[600px] overflow-hidden">
-      <DataList setData={setData} userData={userData} setUserData={setUserData} setActiveData={setActiveData} activeData={activeData} />
+      <DataList setRequest={setRequest} setData={setData} userData={userData} setUserData={setUserData} setActiveData={setActiveData} activeData={activeData} />
       <div className="rounded-2xl overflow-hidden relative">
         <AceEditor
           height="100%"

@@ -59,8 +59,8 @@ export async function POST(req) {
       throw new Error(`Нет доступа к константе. status: ${constants.status}, доступные константы: ${constant.map(obj => obj.id).join(", ")}`);
     }
 
-    let compute = new Function('data', 'newData', 'rubles', 'axios', 'moment', 'petrovich', webScript);
-    const computeResult = compute(data, newData, rubles, axios, moment, petrovich);
+    let compute = new Function('data', 'newData', 'rubles', 'axios', 'moment', 'petrovich','request', webScript);
+    const computeResult = compute(data, newData, rubles, axios, moment, petrovich, request);
     const url_query = `${address}/api/v1/` + computeResult.type + '/' + data.id;
     const resEnd = await axios.patch(url_query, JSON.stringify({ "data": computeResult }), options)
     const time = performance.now() - startTime;
