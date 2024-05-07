@@ -43,7 +43,7 @@ export async function POST(req) {
     let constants = await axios.get(`${address}/api/v1/constants`, options);
     let constant = constants.data.data;
     if (!constants?.data?.data) {
-      setLog({ url_query: `${address}/api/v1/constants`, res_crm: constants.data, res_code_crm: constants.status, const_id, token, version, address });
+      setLog({ url_query: `${address}/api/v2/constants`, res_crm: constants.data, res_code_crm: constants.status, const_id, token, version, address });
       return NextResponse.json({ error: "err" })
     }
     let webScript = constant.find(obj => obj.id == const_id)?.attributes?.value
