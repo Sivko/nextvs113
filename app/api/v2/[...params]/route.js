@@ -1,6 +1,8 @@
 import { setLog } from '@/Modals/LogsModal';
 import { NextResponse } from 'next/server'
 import petrovich from "petrovich";
+import moment from 'moment';
+import 'moment/locale/ru';
 
 const path = require("path");
 
@@ -13,10 +15,10 @@ export async function POST(req) {
   const serilizeUrl = req.url.split('/')
   const getAddress = serilizeUrl.length > 7;
 
-  const token = serilizeUrl[getAddress ? serilizeUrl.length -  2 : serilizeUrl.length - 1]
+  const token = serilizeUrl[getAddress ? serilizeUrl.length - 2 : serilizeUrl.length - 1]
   const const_id = serilizeUrl[getAddress ? serilizeUrl.length - 3 : serilizeUrl.length - 2]
 
-  const address = getAddress ? `https://${serilizeUrl[serilizeUrl.length-1]}` : `https://app.salesap.ru`
+  const address = getAddress ? `https://${serilizeUrl[serilizeUrl.length - 1]}` : `https://app.salesap.ru`
   const startTime = performance.now()
   const version = "2";
 
@@ -24,17 +26,17 @@ export async function POST(req) {
     headers: {
       'Content-Type': 'application/vnd.api+json',
       'Authorization': 'Bearer ' + token,
-      'S2-Allow-Websockets': true
+      'S2-Allow-Websockets': false
       // 'Accept': '*'
     },
     validateStatus: function (status) {
       return true
     }
   }
-  const tmp = await req.json()
-
   const request = await req.json()
-  const data = tmp.data;
+  const data = request.data;
+
+  //console.log(request)
 
   try {
     let newData = { "type": "companies", "id": data.id, "attributes": { "customs": {} } };
@@ -49,10 +51,8 @@ export async function POST(req) {
       throw new Error(`Нет доступа к константе. status: ${constants.status}, доступные константы: ${constant.map(obj => obj.id).join(", ")}`);
     }
     const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
-    let compute = new AsyncFunction('data', 'newData', 'rubles', 'options', 'axios', 'moment', 'petrovich','request', webScript);
+    let compute = new AsyncFunction('data', 'newData', 'rubles', 'options', 'axios', 'moment', 'petrovich', 'request', webScript);
     let computeResult = await compute(data, newData, rubles, options, axios, moment, petrovich, request)
-    const url_query = `${address}/api/v1/` + computeResult.type + '/' + data.id;
-    // const resEnd = await axios.patch(url_query, JSON.stringify({ "data": computeResult }), options);
     const time = performance.now() - startTime;
 
     // if (resEnd.status == 404 || resEnd.status == 500) {
@@ -65,7 +65,9 @@ export async function POST(req) {
     return NextResponse.json({ success: "Ok", time })
   } catch (err) {
     setLog({ const_id, token, error: err, version, address, data });
-    return NextResponse.json({ error: err })
+    return NextResponse.json({ error: err }, {
+      status: 200,
+    })
   }
 }
 
